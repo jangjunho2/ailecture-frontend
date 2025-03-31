@@ -1,3 +1,27 @@
+## ⚙️ 실행 방법
+
+### 로컬 실행
+
+````bash
+npm install
+npm run dev
+
+도커 실행
+
+docker-compose up --build
+
+	•	접속 주소: http://localhost:3000
+
+🛠 사용 기술
+	•	React
+	•	Next.js (SSR 지원)
+	•	TypeScript
+	•	Tailwind CSS (필요 시)
+	•	ESLint / Prettier
+
+---
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -12,7 +36,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+````
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
