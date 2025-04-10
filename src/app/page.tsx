@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <main style={{ padding: "2rem" }}>
-      <h1>Spring 백엔드 연결 테스트 2</h1>
+      <h1>Spring 백엔드 연결 테스트 pb test</h1>
       <p>{msg}</p>
     </main>
   );
