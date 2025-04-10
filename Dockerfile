@@ -1,25 +1,32 @@
-# --- 빌드 스테이지 ---
-    FROM node:18-alpine AS builder
+# Install dependencies only when needed
+FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 
-    WORKDIR /app
-    
-    # 전체 의존성 설치 (dev 포함)
-    COPY package*.json ./
-    RUN npm install
-    
-    # 소스 복사 및 빌드
-    COPY . .
-    RUN npm run build
-    
-    
-    # --- 런타임 스테이지 ---
-    FROM node:18-alpine
-    
-    WORKDIR /app
-    COPY --from=builder /app ./
-    
-    # ❌ 이거 제거
-    # RUN npm install --omit=dev
-    
-    EXPOSE 3000
-    CMD ["npm", "run", "start"]
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# Rebuild the source code only when needed
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN npm run build
+
+# Production image, copy all the files and run next
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
